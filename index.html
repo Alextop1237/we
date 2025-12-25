@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Фотоплёнка | Мы вместе❤️💚</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0a0a0a;
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Фон с черными и зелеными фрагментами */
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background: 
+                repeating-linear-gradient(
+                    45deg,
+                    #0a0a0a,
+                    #0a0a0a 20px,
+                    #0d200d 20px,
+                    #0d200d 40px
+                );
+        }
+
+        /* Боковые гирлянды */
+        .garland-left, .garland-right {
+            position: fixed;
+            top: 0;
+            width: 80px;
+            height: 100vh;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .garland-left {
+            left: 10px;
+        }
+
+        .garland-right {
+            right: 10px;
+        }
+
+        /* Лампочки гирлянды - вертикальная цепочка */
+        .bulb {
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            box-shadow: 0 0 12px currentColor;
+            animation: twinkle 2s infinite alternate;
+        }
+
+        @keyframes twinkle {
+            0% { opacity: 0.4; transform: scale(0.8); }
+            100% { opacity: 1; transform: scale(1.2); }
+        }
+
+        /* Контейнер сайта */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Заголовок */
+        header {
+            text-align: center;
+            padding: 40px 0;
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            color: #2ecc71;
+            text-shadow: 0 0 20px rgba(46, 204, 113, 0.7);
+            margin-bottom: 15px;
+            letter-spacing: 3px;
+        }
+
+        .subtitle {
+            font-size: 1.3rem;
+            color: #bdc3c7;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Основная фотоплёнка */
+        .film-strip {
+            position: relative;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 50px;
+        }
+
+        /* Боковые перфорации плёнки */
+        .film-perforations {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .perforation-left, .perforation-right {
+            position: absolute;
+            top: 0;
+            width: 40px;
+            height: 100%;
+            background: repeating-linear-gradient(
+                to bottom,
+                transparent,
+                transparent 45px,
+                #2ecc71 45px,
+                #2ecc71 50px,
+                transparent 50px,
+                transparent 95px
+            );
+            background-size: 100% 95px;
+        }
+
+        .perforation-left {
+            left: 0;
+        }
+
+        .perforation-right {
+            right: 0;
+        }
+
+        /* Центральная часть плёнки */
+        .film-center {
+            background-color: #111;
+            border-left: 2px solid #2ecc71;
+            border-right: 2px solid #2ecc71;
+            padding: 40px 20px;
+            position: relative;
+            min-height: 200px;
+        }
+
+        /* Кадры на плёнке */
+        .film-frame {
+            background-color: #222;
+            border: 3px solid #2ecc71;
+            border-radius: 5px;
+            margin: 40px auto;
+            padding: 15px;
+            position: relative;
+            max-width: 700px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .film-frame:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 30px rgba(46, 204, 113, 0.3);
+        }
+
+        .frame-number {
+            position: absolute;
+            top: -20px;
+            left: 20px;
+            background-color: #2ecc71;
+            color: #000;
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            z-index: 2;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .photo-container {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .photo {
+            max-width: 100%;
+            max-height: 500px;
+            border-radius: 3px;
+            display: block;
+            margin: 0 auto;
+            border: 1px solid #333;
+        }
+
+        .photo-info {
+            padding: 15px;
+            background-color: rgba(46, 204, 113, 0.1);
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+
+        .photo-title {
+            color: #2ecc71;
+            font-size: 1.4rem;
+            margin-bottom: 8px;
+        }
+
+        .photo-description {
+            color: #bdc3c7;
+            line-height: 1.5;
+            font-size: 1.1rem;
+        }
+
+        .photo-date {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            margin-top: 10px;
+            text-align: right;
+            font-style: italic;
+        }
+
+        /* Декоративные элементы плёнки */
+        .film-decoration {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .film-line {
+            position: absolute;
+            left: 50px;
+            right: 50px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #2ecc71, transparent);
+        }
+
+        .film-line.top {
+            top: 20px;
+        }
+
+        .film-line.bottom {
+            bottom: 20px;
+        }
+
+        /* Инструкция для разработчика */
+        .dev-section {
+            background-color: rgba(20, 20, 20, 0.9);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 60px auto;
+            max-width: 1000px;
+            border: 2px solid #2ecc71;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+        }
+
+        .dev-title {
+            color: #2ecc71;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .code-editor {
+            background-color: #1a1a1a;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 20px 0;
+            border-left: 5px solid #2ecc71;
+            overflow-x: auto;
+        }
+
+        .code-header {
+            color: #7f8c8d;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .copy-btn {
+            background-color: #2ecc71;
+            color: #000;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .copy-btn:hover {
+            background-color: #27ae60;
+        }
+
+        pre {
+            color: #2ecc71;
+            font-family: 'Courier New', monospace;
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        .comment {
+            color: #7f8c8d;
+        }
+
+        .string {
+            color: #e74c3c;
+        }
+
+        .number {
+            color: #3498db;
+        }
+
+        .instructions {
+            margin-top: 30px;
+            line-height: 1.6;
+        }
+
+        .instructions h3 {
+            color: #2ecc71;
+            margin: 20px 0 10px;
+        }
+
+        .instructions ul {
+            margin-left: 20px;
+            margin-bottom: 20px;
+        }
+
+        .instructions li {
+            margin-bottom: 10px;
+        }
+
+        /* Футер */
+        footer {
+            text-align: center;
+            padding: 40px 0;
+            color: #7f8c8d;
+            margin-top: 60px;
+            border-top: 1px solid rgba(46, 204, 113, 0.3);
+        }
+
+        .film-end {
+            display: inline-block;
+            background-color: #222;
+            color: #2ecc71;
+            padding: 10px 30px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            margin-top: 20px;
+            border: 1px solid #2ecc71;
+        }
+
+        /* Анимация загрузки новых кадров */
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .new-frame {
+            animation: slideIn 0.8s ease-out;
+        }
+
+        /* Адаптивность */
+        @media (max-width: 1200px) {
+            .film-strip {
+                padding: 0 30px;
+            }
+            
+            .garland-left, .garland-right {
+                width: 60px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .film-strip {
+                padding: 0 20px;
+            }
+            
+            .perforation-left, .perforation-right {
+                width: 30px;
+                background-size: 100% 85px;
+            }
+            
+            .garland-left, .garland-right {
+                width: 40px;
+            }
+            
+            .film-frame {
+                padding: 10px;
+            }
+            
+            .photo {
+                max-height: 300px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .subtitle {
+                font-size: 1.1rem;
+            }
+            
+            .film-strip {
+                padding: 0 15px;
+            }
+            
+            .perforation-left, .perforation-right {
+                width: 20px;
+            }
+            
+            .garland-left, .garland-right {
+                width: 30px;
+            }
+            
+            .dev-section {
+                padding: 20px;
+            }
+            
+            .code-editor {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Фон -->
+    <div class="background"></div>
+    
+    <!-- Гирлянды -->
+    <div class="garland-left" id="leftGarland"></div>
+    <div class="garland-right" id="rightGarland"></div>
+    
+    <!-- Основной контент -->
+    <div class="container">
+        <header>
+            <h1>ФОТОПЛЁНКА</h1>
+            <p class="subtitle">Решил тебя порадовать на новый год, считай это дополнение к подарку, надеюсь тебе понравится:)</p>
+        </header>
+        
+        <!-- Фотоплёнка -->
+        <section class="film-strip">
+            <!-- Декоративные линии -->
+            <div class="film-decoration">
+                <div class="film-line top"></div>
+                <div class="film-line bottom"></div>
+            </div>
+            
+            <!-- Перфорации -->
+            <div class="film-perforations">
+                <div class="perforation-left"></div>
+                <div class="perforation-right"></div>
+            </div>
+            
+            <!-- Центральная часть плёнки -->
+            <div class="film-center" id="filmCenter">
+                <!-- Кадры будут добавляться сюда через JavaScript -->
+            </div>
+        </section>
+    <script>
+        // ==============================================
+        // МАССИВ ФОТОГРАФИЙ - РЕДАКТИРУЙТЕ ЗДЕСЬ!
+        // Каждая фотография будет отдельным кадром на плёнке
+        // ==============================================
+        const photos = [
+            {
+                id: 1,
+                title: "До того, как стало мейнстрим",
+                description: "Еще в первые встречи умудрился тебя взть на руки)",
+                url: "haXEq4Nwcbxg2050QmIgWeNQ5QQxb2jLTuOrQhuj-O4IzPhJpLUaXNN49lMg1hwXRmJaPPzSKFPyUa_n5vX23_UI.jpg",
+            },
+            {
+                id: 2,
+                title: "Один из первых концертов ТТ",
+                description: "Хорошая музыка",
+                url: "_Mh95uzgRlM3yRFg6Jv-uxFEHnzovLesKwu1eowNvUia93kesTveZJLGQTgG5TP0an5HnGSXcB6zE3ILwWbEKoBO.jpg",
+            },
+            {
+                id: 3,
+                title: "Последний концерт ТТ",
+                description: "Уже состав группы изменился, а мы нет",
+                url: "photo_2025-11-22_09-12-00.jpg",
+            },
+            {
+                id: 4,
+                title: "Легендарный жест",
+                description: "Все нужно делать вместе",
+                url: "photo_2025-11-01_00-11-20.jpg",
+            },
+            {
+                id: 5,
+                title: "Впервые у меня дома",
+                description: "Косички красивые:)",
+                url: "photo_2025-10-20_23-12-03.jpg",
+            },
+            {
+                id: 6,
+                title: "Просыпаться вместе",
+                description: "Жаль, что нечасто можем себе такое позволить..",
+                url: "photo_2025-10-28_10-27-41.jpg",
+            },
+            {
+                id: 7,
+                title: "Милота, да и только",
+                description: "Прости, что потерял:(",
+                url: "photo_2025-11-03_21-55-49.jpg",
+            },
+            {
+                id: 8,
+                title: "Любов",
+                description: "Спасибо тебе, любимая💚",
+                url: "photo_2025-11-19_20-31-43.jpg",
+            },
+        ];
+
+        // ==============================================
+        // КОНЕЦ РЕДАКТИРУЕМОЙ ЧАСТИ
+        // ==============================================
+
+        // Создание гирлянд
+        function createGarland(garlandElement) {
+            const colors = ['#ff0000', '#00ff00', '#ffff00', '#ff00ff', '#00ffff', '#ff8800'];
+            const height = window.innerHeight;
+            const bulbCount = Math.floor(height / 30);
+            
+            for (let i = 0; i < bulbCount; i++) {
+                const bulb = document.createElement('div');
+                bulb.className = 'bulb';
+                
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                bulb.style.backgroundColor = color;
+                bulb.style.color = color;
+                
+                const leftPosition = Math.random() * 100;
+                bulb.style.left = `${leftPosition}%`;
+                
+                const topPosition = (i / bulbCount) * 100;
+                bulb.style.top = `${topPosition}%`;
+                
+                bulb.style.animationDelay = `${Math.random() * 3}s`;
+                bulb.style.animationDuration = `${1 + Math.random() * 2}s`;
+                
+                garlandElement.appendChild(bulb);
+            }
+        }
+
+        // Создание кадров на плёнке
+        function createFilmFrames() {
+            const filmCenter = document.getElementById('filmCenter');
+            filmCenter.innerHTML = '';
+            
+            if (photos.length === 0) {
+                filmCenter.innerHTML = `
+                    <div class="film-frame">
+                        <div class="frame-number">0</div>
+                        <div class="photo-info">
+                            <h3 class="photo-title">Плёнка пуста</h3>
+                            <p class="photo-description">Добавьте фотографии в массив photos</p>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+            
+            photos.forEach((photo, index) => {
+                const frame = document.createElement('div');
+                frame.className = 'film-frame new-frame';
+                frame.style.animationDelay = `${index * 0.1}s`;
+                
+                frame.innerHTML = `
+                    <div class="photo-container">
+                        <img src="${photo.url}" alt="${photo.title}" class="photo" loading="lazy">
+                    </div>
+                    <div class="photo-info">
+                        <h3 class="photo-title">${photo.title}</h3>
+                        <p class="photo-description">${photo.description}</p>
+                    </div>
+                `;
+                
+                filmCenter.appendChild(frame);
+            });
+        }
+
+        // Обновление превью кода
+        function updateCodePreview() {
+            const codePreview = document.getElementById('codePreview');
+            let previewText = '';
+            
+            photos.forEach((photo, index) => {
+                previewText += `    {\n`;
+                previewText += `        id: ${photo.id},\n`;
+                previewText += `        title: "${photo.title}",\n`;
+                previewText += `        description: "${photo.description}",\n`;
+                previewText += `        url: "${photo.url}",\n`;
+                previewText += `        date: "${photo.date}"\n`;
+                previewText += `    }${index < photos.length - 1 ? ',' : ''}\n`;
+            });
+            
+            codePreview.textContent = previewText;
+        }
+
+        // Копирование кода
+        function copyCode() {
+            const codeText = `const photos = [\n${document.getElementById('codePreview').textContent}];`;
+            
+            navigator.clipboard.writeText(codeText).then(() => {
+                const btn = document.querySelector('.copy-btn');
+                const originalText = btn.textContent;
+                btn.textContent = 'Скопировано!';
+                btn.style.backgroundColor = '#27ae60';
+                
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.style.backgroundColor = '#2ecc71';
+                }, 2000);
+            });
+        }
+
+        // Инициализация
+        document.addEventListener('DOMContentLoaded', function() {
+            const leftGarland = document.getElementById('leftGarland');
+            const rightGarland = document.getElementById('rightGarland');
+            
+            createGarland(leftGarland);
+            createGarland(rightGarland);
+            createFilmFrames();
+            updateCodePreview();
+            
+            // Обновление гирлянд при изменении размера окна
+            window.addEventListener('resize', function() {
+                leftGarland.innerHTML = '';
+                rightGarland.innerHTML = '';
+                createGarland(leftGarland);
+                createGarland(rightGarland);
+            });
+            
+            // Плавная прокрутка к новым кадрам
+            const frames = document.querySelectorAll('.film-frame');
+            frames.forEach(frame => {
+                frame.addEventListener('click', function() {
+                    this.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                });
+            });
+            
+            // Добавляем эффект при прокрутке
+            window.addEventListener('scroll', function() {
+                const scrolled = window.pageYOffset;
+                const rate = scrolled * -0.5;
+                
+                // Параллакс эффект для фона
+                document.querySelector('.background').style.transform = `translateY(${rate * 0.2}px)`;
+                
+                // Эффект для гирлянд
+                document.querySelectorAll('.bulb').forEach(bulb => {
+                    const speed = bulb.getAttribute('data-speed') || Math.random() * 0.5 + 0.5;
+                    bulb.style.transform = `translateY(${rate * speed * 0.1}px)`;
+                });
+            });
+            
+            // Инициализируем случайную скорость для каждой лампочки
+            document.querySelectorAll('.bulb').forEach(bulb => {
+                bulb.setAttribute('data-speed', Math.random() * 0.5 + 0.5);
+            });
+        });
+
+        // Симуляция добавления нового кадра (для демонстрации)
+        window.addNewFrame = function() {
+            const newId = photos.length + 1;
+            const newPhoto = {
+                id: newId,
+                title: `Новый кадр ${newId}`,
+                description: "Это демонстрация добавления нового кадра на плёнку. В реальном коде добавьте свою фотографию.",
+                url: "https://images.unsplash.com/photo-1482517967863-00e15c9b44be?w=900&h=600&fit=crop",
+                date: new Date().toLocaleDateString('ru-RU')
+            };
+            
+            photos.push(newPhoto);
+            createFilmFrames();
+            updateCodePreview();
+            
+            // Прокрутка к новому кадру
+            setTimeout(() => {
+                const frames = document.querySelectorAll('.film-frame');
+                frames[frames.length - 1].scrollIntoView({ behavior: 'smooth' });
+            }, 500);
+        };
+    </script>
+</body>
+</html>
